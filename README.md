@@ -1,56 +1,55 @@
 🔐 PassFort
+<p align="center"> A modern password manager built with React & Tailwind CSS for learning and practice. </p> <p align="center"> <img src="https://img.shields.io/badge/React-Frontend-blue?logo=react" /> <img src="https://img.shields.io/badge/TailwindCSS-Styling-38B2AC?logo=tailwind-css" /> <img src="https://img.shields.io/badge/Status-Practice_Project-purple" /> </p>
+✨ About The Project
 
-PassFort is a simple password manager built with React and Tailwind CSS as a practice project while following a YouTube tutorial.
+PassFort is a simple and clean password manager built while following a YouTube tutorial for practice.
 
-This project focuses on understanding:
+The goal of this project was to strengthen my understanding of:
 
 React state management (useState)
 
-Form handling
+Handling form inputs
 
-Password show/hide toggle functionality
+Conditional rendering
 
-Component structuring
+Password visibility toggle logic
 
-Modern UI styling with Tailwind
+Building clean UI with Tailwind CSS
 
 🚀 Features
 
-Add Website URL
+🌐 Add Website URL
 
-Add Username
+👤 Add Username
 
-Add Password
+🔑 Add Password
 
-Toggle password visibility (Show/Hide)
+👁 Toggle password visibility
 
-Clean gradient UI design
+🎨 Modern gradient UI
 
-Responsive layout
+📱 Responsive layout
 
 🛠 Tech Stack
 
-React
+⚛️ React
 
-Tailwind CSS
+🎨 Tailwind CSS
 
-React Icons
-
-📚 Purpose
-
-This project was built for learning and practice purposes.
-It helped me understand how to manage form inputs, handle component state, and build interactive UI elements in React.
+🔘 React Icons
 
 🔮 Future Improvements
 
-Save passwords using localStorage
+💾 Store passwords using localStorage
 
-Add edit/delete functionality
+✏️ Add edit & delete functionality
 
-Copy password to clipboard
+📋 Copy to clipboard feature
 
-Add basic validation
+✅ Form validation
 
-Improve accessibility
+🔐 Backend integration
 
-Add backend integration
+📚 Learning Purpose
+
+This project was built as part of my journey to improve my React fundamentals and frontend development skills.
