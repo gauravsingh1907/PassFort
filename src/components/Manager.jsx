@@ -1,20 +1,34 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { RiFunctionAddFill } from "react-icons/ri";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 
-
 const Manager = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [form, setform] = useState({ site: "", username: "", password: "" });
+  const [passwordArray, setPasswordArray] = useState([])
+
+useEffect(() => {
+let passwords = localStorage.getItem("passwords");
+if(passwords){
+  setPasswordArray(JSON.parse(passwords))
+}
+}, [])
 
 
+  const savePasswords = () => {
+  setPasswordArray([...passwordArray, form])
+  localStorage.setItem("passwords", JSON.stringify([...passwordArray, form]))
+  };
   const showingpassword = () => {
+    setShowPassword((prev) => !prev);
+  };
 
-    setShowPassword(prev => !prev)
-
-
-  }
-
-
+  const handlechange = (e) => {
+    setform({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   return (
     <>
@@ -38,21 +52,29 @@ const Manager = () => {
         </div>
 
         <input
+          value={form.site}
+          onChange={handlechange}
           type="text"
+          name="site"
           placeholder="Enter Website URL"
           className="w-full px-4 py-2 rounded-md bg-white/5 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-violet-500"
         />
 
         <div className="flex gap-4">
           <input
+            value={form.username}
+            onChange={handlechange}
             type="text"
+            name="username"
             placeholder="Enter Username"
             className="flex-1 px-4 py-2 rounded-md bg-white/5 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-violet-500"
           />
           <div className="relative">
-
             <input
+              value={form.password}
+              onChange={handlechange}
               type={showPassword ? "text" : "password"}
+              name="password"
               placeholder="Enter Password"
               className="w-70  px-4 py-2 rounded-md bg-white/5 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-violet-500"
             />
@@ -63,14 +85,15 @@ const Manager = () => {
             >
               {showPassword ? <IoEyeOff /> : <IoEye />}
             </button>
-
           </div>
         </div>
 
         <button
+          onClick={savePasswords}
           className=" flex gap-2 justify-center items-center mx-auto px-6 py-2 rounded-xl bg-gradient-to-r from-violet-500 to-purple-600 text-white font-semibold hover:scale-105 hover:shadow-lg hover:shadow-violet-500/30 hover:cursor-pointer transition duration-300"
         >
-          <RiFunctionAddFill />Save
+          <RiFunctionAddFill />
+          Save
         </button>
       </div>
     </>
