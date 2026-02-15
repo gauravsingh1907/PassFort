@@ -7,17 +7,17 @@ const Manager = () => {
   const [form, setform] = useState({ site: "", username: "", password: "" });
   const [passwordArray, setPasswordArray] = useState([])
 
-useEffect(() => {
-let passwords = localStorage.getItem("passwords");
-if(passwords){
-  setPasswordArray(JSON.parse(passwords))
-}
-}, [])
+  useEffect(() => {
+    let passwords = localStorage.getItem("passwords");
+    if (passwords) {
+      setPasswordArray(JSON.parse(passwords))
+    }
+  }, [])
 
 
   const savePasswords = () => {
-  setPasswordArray([...passwordArray, form])
-  localStorage.setItem("passwords", JSON.stringify([...passwordArray, form]))
+    setPasswordArray([...passwordArray, form])
+    localStorage.setItem("passwords", JSON.stringify([...passwordArray, form]))
   };
   const showingpassword = () => {
     setShowPassword((prev) => !prev);
@@ -32,7 +32,6 @@ if(passwords){
 
   return (
     <>
-      <div className="absolute inset-0 -z-10 h-full w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]"></div>
 
       <div className=" max-w-7xl mx-auto mt-20 p-6 space-y-4">
         {/* title */}
@@ -95,6 +94,33 @@ if(passwords){
           <RiFunctionAddFill />
           Save
         </button>
+        <div className="passwords max-w-7xl mx-auto mt-10 p-6 bg-black/40 backdrop-blur-lg rounded-xl border border-white/10">
+  <h2 className="text-2xl font-bold text-white mb-4">Your Passwords</h2>
+      {passwordArray.length===0 && <div className="text-white text-lg text-center p-4"> No Passwords Saved </div>}
+      {passwordArray.length != 0 &&
+  <div className="overflow-x-auto">
+    <table className="table-auto w-full text-left border-collapse">
+      <thead>
+        <tr className="bg-white/10">
+          <th className="px-4 py-2 text-gray-200 text-center min-w-32">Website</th>
+          <th className="px-4 py-2 text-gray-200 text-center min-w-32">Username</th>
+          <th className="px-4 py-2 text-gray-200 text-center min-w-32">Password</th>
+        </tr>
+      </thead>
+      <tbody>
+       {passwordArray.map((item,index) => {
+        return  <tr key={index} className="border-t border-white/10 hover:bg-white/5 transition">
+          <td className="px-4 py-2 text-white text-center min-w-32"><a href={item.site} target="_blank">{item.site}</a></td>
+          <td className="px-4 py-2 text-white text-center min-w-32">{item.username}</td>
+          <td className="px-4 py-2 text-white text-center min-w-32">{item.password}</td>
+        </tr>
+       })}
+
+      </tbody>
+    </table>
+  </div>}
+</div>
+
       </div>
     </>
   );
