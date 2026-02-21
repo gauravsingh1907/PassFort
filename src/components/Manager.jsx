@@ -1,14 +1,17 @@
 import { useState, useEffect } from "react";
 import react from "react";
-import { RiFunctionAddFill } from "react-icons/ri";
+import { RiFunctionAddFill, RiEdit2Line } from "react-icons/ri";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import { FaCopy } from "react-icons/fa6";
 import { ToastContainer, toast } from 'react-toastify';
+import { MdOutlineDelete } from "react-icons/md";
+import { v4 as uuidv4 } from 'uuid';
 
 const Manager = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [form, setform] = useState({ site: "", username: "", password: "" });
   const [passwordArray, setPasswordArray] = useState([])
+  const [editId, setEditId] = useState(null);
 
   useEffect(() => {
     let passwords = localStorage.getItem("passwords");
@@ -36,12 +39,110 @@ const Manager = () => {
 
 
   const savePasswords = () => {
-    setPasswordArray([...passwordArray, form])
-    localStorage.setItem("passwords", JSON.stringify([...passwordArray, form]))
+    if (Object.values(form).some(value => value.trim() === "")) {
+      toast.error("All fields are required!");
+      return;
+    }
+    if (editId) {
+      const updated = passwordArray.map(item =>
+        item.id === editId ? { ...form, id: editId } : item);
+
+
+      setPasswordArray(updated);
+      localStorage.setItem("passwords", JSON.stringify(updated));
+      setEditId(null);
+      toast.success('Edited Successfully!', {
+        position: "bottom-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+
+      });
+    }
+    else {
+
+      const id = uuidv4();
+      setPasswordArray([...passwordArray, { ...form, id }])
+      localStorage.setItem("passwords", JSON.stringify([...passwordArray, { ...form, id }]))
+      toast.success('Saved Successfully!', {
+        position: "bottom-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+
+      });
+    }
+
+    setform({ site: "", username: "", password: "" });
   };
+
+
+
+
+
+
+
+  const deletePassword = (id) => {
+    const confirmDelete = window.confirm("Are you sure?");
+    if (confirmDelete == true) {
+
+      setPasswordArray(passwordArray.filter(item => item.id !== id))
+      localStorage.setItem("passwords", JSON.stringify(passwordArray.filter(item => item.id !== id)))
+      toast.success('Deleted successfully!', {
+        position: "bottom-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+
+      });
+    }
+  };
+
+
+
+
+
+
+  const editPassword = (id) => {
+    const item = passwordArray.find(item => item.id === id);
+
+    setform({
+      site: item.site,
+      username: item.username,
+      password: item.password
+    });
+
+    setEditId(id);
+  };
+
+
+
+
+
+
+
+
   const showingpassword = () => {
     setShowPassword((prev) => !prev);
   };
+
+
+
+
+
+
 
   const handlechange = (e) => {
     setform({
@@ -49,6 +150,14 @@ const Manager = () => {
       [e.target.name]: e.target.value,
     });
   };
+
+
+
+
+
+
+
+
 
   return (
     <>
@@ -137,27 +246,34 @@ const Manager = () => {
                     <th className="px-4 py-2 text-gray-200 text-center min-w-32">Website</th>
                     <th className="px-4 py-2 text-gray-200 text-center min-w-32">Username</th>
                     <th className="px-4 py-2 text-gray-200 text-center min-w-32">Password</th>
+                    <th className="px-4 py-2 text-gray-200 text-center min-w-32">Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   {passwordArray.map((item, index) => {
                     return <tr key={index} className="border-t border-white/10 hover:bg-white/5 transition">
-                      <td className="px-4 py-2 text-white text-center min-w-32">
+                      <td className="px-4 py-2 text-white text-center">
                         <div className="flex items-center justify-center gap-2.5">
                           <a href={item.site} target="_blank">{item.site}</a>
-                          <div className="cursor-pointer" onClick={() => { copybutton(item.site) }}><FaCopy /></div>
+                          <div className="cursor-pointer transition hover:scale-110 active:scale-90" onClick={() => { copybutton(item.site) }}><FaCopy /></div>
                         </div>
                       </td>
-                      <td className="px-4 py-2 text-white text-center min-w-32">
+                      <td className="px-4 py-2 text-white text-center">
                         <div className="flex items-center justify-center gap-2.5">
                           {item.username}
-                          <div className="cursor-pointer" onClick={() => { copybutton(item.username) }}><FaCopy /></div>
+                          <div className="cursor-pointer transition hover:scale-110 active:scale-90" onClick={() => { copybutton(item.username) }}><FaCopy /></div>
                         </div>
                       </td>
-                      <td className="px-4 py-2 text-white text-center min-w-32">
+                      <td className="px-4 py-2 text-white text-center">
                         <div className="flex items-center justify-center gap-2.5">
                           {item.password}
-                          <div className="cursor-pointer" onClick={() => { copybutton(item.password) }}><FaCopy /></div>
+                          <div className="cursor-pointer transition hover:scale-110 active:scale-90" onClick={() => { copybutton(item.password) }}><FaCopy /></div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-2 text-white text-center">
+                        <div className="flex justify-center gap-4 text-xl">
+                          <span className="cursor-pointer transition hover:scale-110 active:scale-90" onClick={() => { editPassword(item.id) }}><RiEdit2Line /></span>
+                          <span className="cursor-pointer transition hover:scale-110 active:scale-90" onClick={() => { deletePassword(item.id) }}><MdOutlineDelete /></span>
                         </div>
                       </td>
                     </tr>
