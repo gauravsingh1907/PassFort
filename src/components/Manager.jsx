@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import react from "react";
 import { RiFunctionAddFill } from "react-icons/ri";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import { FaCopy } from "react-icons/fa6";
+import { ToastContainer, toast } from 'react-toastify';
 
 const Manager = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -16,9 +18,20 @@ const Manager = () => {
   }, [])
 
 
-const copybutton =  (text) => {
-  navigator.clipboard.writeText(text)
-}
+  const copybutton = (text) => {
+    toast.success('Copied successfully!', {
+      position: "bottom-left",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+
+    });
+    navigator.clipboard.writeText(text)
+  }
 
 
 
@@ -39,6 +52,18 @@ const copybutton =  (text) => {
 
   return (
     <>
+      <ToastContainer
+        position="bottom-left"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
 
       <div className=" max-w-7xl mx-auto mt-20 p-6 space-y-4">
         {/* title */}
@@ -120,19 +145,19 @@ const copybutton =  (text) => {
                       <td className="px-4 py-2 text-white text-center min-w-32">
                         <div className="flex items-center justify-center gap-2.5">
                           <a href={item.site} target="_blank">{item.site}</a>
-                          <div className="cursor-pointer" onClick={() => {copybutton(item.site)}}><FaCopy /></div>
+                          <div className="cursor-pointer" onClick={() => { copybutton(item.site) }}><FaCopy /></div>
                         </div>
                       </td>
                       <td className="px-4 py-2 text-white text-center min-w-32">
                         <div className="flex items-center justify-center gap-2.5">
                           {item.username}
-                          <div className="cursor-pointer" onClick={() => {copybutton(item.username)}}><FaCopy /></div>
+                          <div className="cursor-pointer" onClick={() => { copybutton(item.username) }}><FaCopy /></div>
                         </div>
                       </td>
                       <td className="px-4 py-2 text-white text-center min-w-32">
                         <div className="flex items-center justify-center gap-2.5">
                           {item.password}
-                          <div className="cursor-pointer" onClick={() => {copybutton(item.password)}}><FaCopy /></div>
+                          <div className="cursor-pointer" onClick={() => { copybutton(item.password) }}><FaCopy /></div>
                         </div>
                       </td>
                     </tr>
