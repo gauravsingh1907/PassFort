@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { RiFunctionAddFill } from "react-icons/ri";
 import { IoEye, IoEyeOff } from "react-icons/io5";
+import { FaCopy } from "react-icons/fa6";
 
 const Manager = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -13,6 +14,12 @@ const Manager = () => {
       setPasswordArray(JSON.parse(passwords))
     }
   }, [])
+
+
+const copybutton =  (text) => {
+  navigator.clipboard.writeText(text)
+}
+
 
 
   const savePasswords = () => {
@@ -95,31 +102,46 @@ const Manager = () => {
           Save
         </button>
         <div className="passwords max-w-7xl mx-auto mt-10 p-6 bg-black/40 backdrop-blur-lg rounded-xl border border-white/10">
-  <h2 className="text-2xl font-bold text-white mb-4">Your Passwords</h2>
-      {passwordArray.length===0 && <div className="text-white text-lg text-center p-4"> No Passwords Saved </div>}
-      {passwordArray.length != 0 &&
-  <div className="overflow-x-auto">
-    <table className="table-auto w-full text-left border-collapse">
-      <thead>
-        <tr className="bg-white/10">
-          <th className="px-4 py-2 text-gray-200 text-center min-w-32">Website</th>
-          <th className="px-4 py-2 text-gray-200 text-center min-w-32">Username</th>
-          <th className="px-4 py-2 text-gray-200 text-center min-w-32">Password</th>
-        </tr>
-      </thead>
-      <tbody>
-       {passwordArray.map((item,index) => {
-        return  <tr key={index} className="border-t border-white/10 hover:bg-white/5 transition">
-          <td className="px-4 py-2 text-white text-center min-w-32"><a href={item.site} target="_blank">{item.site}</a></td>
-          <td className="px-4 py-2 text-white text-center min-w-32">{item.username}</td>
-          <td className="px-4 py-2 text-white text-center min-w-32">{item.password}</td>
-        </tr>
-       })}
+          <h2 className="text-2xl font-bold text-white mb-4">Your Passwords</h2>
+          {passwordArray.length === 0 && <div className="text-white text-lg text-center p-4"> No Passwords Saved </div>}
+          {passwordArray.length != 0 &&
+            <div className="overflow-x-auto">
+              <table className="table-auto w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-white/10">
+                    <th className="px-4 py-2 text-gray-200 text-center min-w-32">Website</th>
+                    <th className="px-4 py-2 text-gray-200 text-center min-w-32">Username</th>
+                    <th className="px-4 py-2 text-gray-200 text-center min-w-32">Password</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {passwordArray.map((item, index) => {
+                    return <tr key={index} className="border-t border-white/10 hover:bg-white/5 transition">
+                      <td className="px-4 py-2 text-white text-center min-w-32">
+                        <div className="flex items-center justify-center gap-2.5">
+                          <a href={item.site} target="_blank">{item.site}</a>
+                          <div className="cursor-pointer" onClick={() => {copybutton(item.site)}}><FaCopy /></div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-2 text-white text-center min-w-32">
+                        <div className="flex items-center justify-center gap-2.5">
+                          {item.username}
+                          <div className="cursor-pointer" onClick={() => {copybutton(item.username)}}><FaCopy /></div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-2 text-white text-center min-w-32">
+                        <div className="flex items-center justify-center gap-2.5">
+                          {item.password}
+                          <div className="cursor-pointer" onClick={() => {copybutton(item.password)}}><FaCopy /></div>
+                        </div>
+                      </td>
+                    </tr>
+                  })}
 
-      </tbody>
-    </table>
-  </div>}
-</div>
+                </tbody>
+              </table>
+            </div>}
+        </div>
 
       </div>
     </>
