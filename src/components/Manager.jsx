@@ -44,9 +44,16 @@ const Manager = () => {
       toast.error("All fields are required!");
       return;
     }
+
+      let site = form.site;
+  if (!site.startsWith("http://") && !site.startsWith("https://")) {
+    site = `https://${site}`;
+  }
+
+  console.log("Normalized URL:", site); // ✅ check he
     if (editId) {
       const updated = passwordArray.map(item =>
-        item.id === editId ? { ...form, id: editId } : item);
+        item.id === editId ? { ...form, site, id: editId } : item);
 
 
       setPasswordArray(updated);
@@ -67,8 +74,8 @@ const Manager = () => {
     else {
 
       const id = uuidv4();
-      setPasswordArray([...passwordArray, { ...form, id }])
-      localStorage.setItem("passwords", JSON.stringify([...passwordArray, { ...form, id }]))
+      setPasswordArray([...passwordArray, { ...form, site, id }])
+      localStorage.setItem("passwords", JSON.stringify([...passwordArray, { ...form, site, id }]))
       toast.success('Saved Successfully!', {
         position: "bottom-left",
         autoClose: 5000,
@@ -256,7 +263,7 @@ const Manager = () => {
                     return <tr key={item.id} className="border-t border-white/10 hover:bg-white/5 transition">
                       <td className="px-4 py-2 text-white text-center">
                         <div className="flex items-center justify-center gap-2.5">
-                          <a href={item.site} target="_blank">{item.site}</a>
+                          <a href={item.site} target="_blank" rel="noopener noreferrer">{item.site}</a>
                           <div className="cursor-pointer transition hover:scale-110 active:scale-90" onClick={() => { copybutton(item.site) }}><FaCopy /></div>
                         </div>
                       </td>
