@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import react from "react";
 import { RiFunctionAddFill, RiEdit2Line } from "react-icons/ri";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import { FaCopy } from "react-icons/fa6";
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { MdOutlineDelete } from "react-icons/md";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -12,6 +12,7 @@ const Manager = () => {
   const [form, setform] = useState({ site: "", username: "", password: "" });
   const [passwordArray, setPasswordArray] = useState([])
   const [editId, setEditId] = useState(null);
+  const [visibleId, setVisibleId] = useState(null);
 
   useEffect(() => {
     let passwords = localStorage.getItem("passwords");
@@ -200,7 +201,7 @@ const Manager = () => {
           className="w-full px-4 py-2 rounded-md bg-white/5 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-violet-500"
         />
 
-        <div className="flex gap-4">
+        <div className="flex flex-col md:flex-row gap-4">
           <input
             value={form.username}
             onChange={handlechange}
@@ -216,7 +217,7 @@ const Manager = () => {
               type={showPassword ? "text" : "password"}
               name="password"
               placeholder="Enter Password"
-              className="w-70  px-4 py-2 rounded-md bg-white/5 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-violet-500"
+              className="w-full md:w-72  px-4 py-2 rounded-md bg-white/5 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-violet-500"
             />
             <button
               type="button"
@@ -238,9 +239,9 @@ const Manager = () => {
         <div className="passwords max-w-7xl mx-auto mt-10 p-6 bg-black/40 backdrop-blur-lg rounded-xl border border-white/10">
           <h2 className="text-2xl font-bold text-white mb-4">Your Passwords</h2>
           {passwordArray.length === 0 && <div className="text-white text-lg text-center p-4"> No Passwords Saved </div>}
-          {passwordArray.length != 0 &&
-            <div className="overflow-x-auto">
-              <table className="table-auto w-full text-left border-collapse">
+          {passwordArray.length !== 0 &&
+            <div className="overflow-x-auto rounded-lg">
+              <table className="table-auto w-full text-xs md:text-lg border-collapse">
                 <thead>
                   <tr className="bg-white/10">
                     <th className="px-4 py-2 text-gray-200 text-center min-w-32">Website</th>
@@ -250,8 +251,9 @@ const Manager = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {passwordArray.map((item, index) => {
-                    return <tr key={index} className="border-t border-white/10 hover:bg-white/5 transition">
+
+                  {passwordArray.map((item) => {
+                    return <tr key={item.id} className="border-t border-white/10 hover:bg-white/5 transition">
                       <td className="px-4 py-2 text-white text-center">
                         <div className="flex items-center justify-center gap-2.5">
                           <a href={item.site} target="_blank">{item.site}</a>
@@ -266,8 +268,23 @@ const Manager = () => {
                       </td>
                       <td className="px-4 py-2 text-white text-center">
                         <div className="flex items-center justify-center gap-2.5">
-                          {item.password}
-                          <div className="cursor-pointer transition hover:scale-110 active:scale-90" onClick={() => { copybutton(item.password) }}><FaCopy /></div>
+                          {visibleId === item.id ? item.password : "•".repeat(item.password.length)}
+
+                          <span
+                            className="cursor-pointer"
+                            onClick={() =>
+                              setVisibleId(visibleId === item.id ? null : item.id)
+                            }
+                          >
+                            {visibleId === item.id ? <IoEyeOff /> : <IoEye />}
+                          </span>
+
+                          <div
+                            className="cursor-pointer transition hover:scale-110 active:scale-90"
+                            onClick={() => copybutton(item.password)}
+                          >
+                            <FaCopy />
+                          </div>
                         </div>
                       </td>
                       <td className="px-4 py-2 text-white text-center">
